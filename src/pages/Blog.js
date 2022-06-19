@@ -1,7 +1,8 @@
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
-import { useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import axios from 'axios';
 // material
 import {
   Card,
@@ -32,11 +33,11 @@ import USERLIST from '../_mock/products';
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Price', alignRight: false },
-  { id: 'role', label: 'Price Sale', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
+  { id: 'phone', label: 'Phone', alignRight: false },
+  { id: 'address', label: 'Address', alignRight: false },
+  { id: 'price', label: 'Price', alignRight: false },
+  { id: 'products', label: 'Products', alignRight: false},
   { id: 'status', label: 'Status', alignRight: false },
-  { id: '' },
 ];
 
 // ----------------------------------------------------------------------
@@ -71,8 +72,6 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function User() {
-  const navigate = useNavigate();
-
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
@@ -85,6 +84,18 @@ export default function User() {
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
+  const [listOrder, setListOrder] = useState([]);
+  const [products, setProducts ]= useState('');
+
+  useEffect(() => {
+    async function loadListOrder() {
+      const res = await axios.get('http://localhost:3000/api/v1/ordereds');
+      // console.log(res.data);
+      setListOrder(res.data); 
+    }
+    loadListOrder();
+  }, [])
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -93,7 +104,7 @@ export default function User() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.name);
+      const newSelecteds = listOrder.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -128,18 +139,18 @@ export default function User() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - listOrder.length) : 0;
 
-  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(listOrder, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="User">
+    <Page title="Order">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            User
+            Order
           </Typography>
         </Stack>
 
@@ -153,22 +164,28 @@ export default function User() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={USERLIST.length}
+                  rowCount={listOrder.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, priceSale, status, price, cover, isVerified } = row;
+                    const id=row.id;
+                    const name=row.recipient_name;
+                    const address=row.recipient_address;
+                    const phone=row.recipient_phone
+                    const status=row.status;
+                    const price=row.total_price
+
+                    
+
+
+
                     const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
                       <TableRow
-                        onClick={() => {
-                          console.log('123')
-                          navigate('/dashboard/orderDtail');
-                        }}
                         hover
                         key={id}
                         tabIndex={-1}
@@ -179,25 +196,23 @@ export default function User() {
                         <TableCell padding="checkbox">
                           <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
                         </TableCell>
-                        <TableCell component="th" scope="row" padding="none">
+                        {/* <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
                             <Avatar alt={name} src={cover} />
                             <Typography variant="subtitle2" noWrap>
                               {name}
                             </Typography>
                           </Stack>
-                        </TableCell>
+                        </TableCell> */}
+                        <TableCell align="left">{name}</TableCell>
+                        <TableCell align="left">{phone}</TableCell>
+                        <TableCell align="left">{address}</TableCell>
                         <TableCell align="left">{price}</TableCell>
-                        <TableCell align="left">{priceSale}</TableCell>
-                        <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
+                        <TableCell align="left">{products}</TableCell>
                         <TableCell align="left">
-                          <Label variant="ghost" color={(status === 'banned' && 'error') || 'success'}>
+                          <Label variant="ghost" color={(status === 'shipping' && 'info') || 'success'}>
                             {sentenceCase(status)}
                           </Label>
-                        </TableCell>
-
-                        <TableCell align="right">
-                          <UserMoreMenu />
                         </TableCell>
                       </TableRow>
                     );
@@ -225,7 +240,7 @@ export default function User() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={USERLIST.length}
+            count={listOrder.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
