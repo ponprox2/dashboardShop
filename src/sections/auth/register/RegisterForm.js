@@ -44,18 +44,62 @@ export default function RegisterForm() {
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
             <TextField
               fullWidth
-              label="First name"
-              {...getFieldProps('firstName')}
-              error={Boolean(touched.firstName && errors.firstName)}
-              helperText={touched.firstName && errors.firstName}
+              label="Full name"
+              // {...getFieldProps('firstName')}
+              // error={Boolean(touched.firstName && errors.firstName)}
+              // helperText={touched.firstName && errors.firstName}
             />
 
             <TextField
               fullWidth
-              label="Last name"
-              {...getFieldProps('lastName')}
-              error={Boolean(touched.lastName && errors.lastName)}
-              helperText={touched.lastName && errors.lastName}
+              label="Phone number"
+              // {...getFieldProps('lastName')}
+              // error={Boolean(touched.lastName && errors.lastName)}
+              // helperText={touched.lastName && errors.lastName}
+            />
+          </Stack>
+          <TextField
+            fullWidth
+            autoComplete="username"
+            // type=""
+            label="User name"
+            // {...getFieldProps('email')}
+            // error={Boolean(touched.email && errors.email)}
+            // helperText={touched.email && errors.email}
+          />
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+            <TextField
+              fullWidth
+              label="Password"
+              // {...getFieldProps('firstName')}
+              // error={Boolean(touched.firstName && errors.firstName)}
+              // helperText={touched.firstName && errors.firstName}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton edge="end" onClick={() => setShowPassword((prev) => !prev)}>
+                      <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+
+            <TextField
+              fullWidth
+              label="Repassword"
+              // {...getFieldProps('lastName')}
+              // error={Boolean(touched.lastName && errors.lastName)}
+              // helperText={touched.lastName && errors.lastName}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton edge="end" onClick={() => setShowPassword((prev) => !prev)}>
+                      <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
           </Stack>
 
@@ -67,25 +111,6 @@ export default function RegisterForm() {
             {...getFieldProps('email')}
             error={Boolean(touched.email && errors.email)}
             helperText={touched.email && errors.email}
-          />
-
-          <TextField
-            fullWidth
-            autoComplete="current-password"
-            type={showPassword ? 'text' : 'password'}
-            label="Password"
-            {...getFieldProps('password')}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton edge="end" onClick={() => setShowPassword((prev) => !prev)}>
-                    <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            error={Boolean(touched.password && errors.password)}
-            helperText={touched.password && errors.password}
           />
 
           <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
