@@ -56,6 +56,11 @@ export default function RegisterForm() {
       f: repass
     };
     async function insertAdmin() {
+      // Chưa kiểm tra ràng buộc username không được trùng 
+      // || email không được trùng || phone không được trùng
+
+
+
       // const res = await axios.post('', data);
       // // console.log(res.data);
       // if (res?.data?.message === 'Auth successful' && res?.data?.role !== 'user') {
@@ -124,6 +129,7 @@ export default function RegisterForm() {
             <TextField
               fullWidth
               label="Repassword"
+              type={showPassword?'text':'password'}
               onChange={(e) => { setRepass(e.target.value) }}
               {...getFieldProps('repass')}
               error={Boolean(touched.repass && errors.repass)}
