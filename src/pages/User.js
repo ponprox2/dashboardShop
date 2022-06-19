@@ -172,7 +172,10 @@ export default function User() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, phone, status, account} = row;
+                    const { id, name, phone, account} = row;
+                    // Đang để mặc đinh là active vì chưa có thuộc tính 'Status'
+                    const status='active'
+
                     const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
@@ -200,11 +203,11 @@ export default function User() {
                         <TableCell align="left">{phone}</TableCell>
                         <TableCell align="left">{account.username}</TableCell>
                         
-                        {/* <TableCell align="left">
+                        <TableCell align="left">
                           <Label variant="ghost" color={(status === 'banned' && 'error') || 'success'}>
                             {sentenceCase(status)}
                           </Label>
-                        </TableCell> */}
+                        </TableCell>
 
                         <TableCell align="right">
                           <UserMoreMenu />
