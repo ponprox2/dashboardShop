@@ -12,6 +12,7 @@ import Products from './pages/Products';
 import DashboardApp from './pages/DashboardApp';
 import AddProduct from './pages/addProduct';
 import DetailOrder from './pages/detailOrder';
+import UpdProduct from './pages/updateProduct';
 
 // ----------------------------------------------------------------------
 
@@ -28,6 +29,7 @@ export default function Router() {
         // { path: 'login', element: <Login /> },
         { path: 'addProduct', element: <AddProduct /> },
         { path: 'register', element: <Register /> },
+        { path: 'updateProduct/', element: <UpdProduct /> },
         { path: 'orderDetail/', element: <DetailOrder /> },
       ],
     },
