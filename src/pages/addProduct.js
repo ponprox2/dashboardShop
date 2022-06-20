@@ -31,7 +31,7 @@ const SectionStyle = styled(Card)(({ theme }) => ({
   margin: theme.spacing(2, 0, 2, 2),
 }));
 
-export default function LoginForm() {
+export default function AddProduct() {
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);

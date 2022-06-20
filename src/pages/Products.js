@@ -36,8 +36,8 @@ const TABLE_HEAD = [
   { id: 'price', label: 'Price', alignRight: false },
   { id: 'discount', label: 'Discount', alignRight: false },
   { id: 'sizeS', label: 'SizeS', alignRight: false },
-  { id: 'sizeM', label: 'SizeM', alignRight: false},
-  { id: 'sizeL', label: 'SizeL', alignRight: false},
+  { id: 'sizeM', label: 'SizeM', alignRight: false },
+  { id: 'sizeL', label: 'SizeL', alignRight: false },
 ];
 
 // ----------------------------------------------------------------------
@@ -88,11 +88,11 @@ export default function User() {
 
   useEffect(() => {
     async function loadListProduct() {
-      const res = await axios.get('http://localhost:3000/api/v1/products'); 
-      setListProduct(res.data); 
+      const res = await axios.get('http://localhost:3000/api/v1/products');
+      setListProduct(res.data);
     }
     loadListProduct();
-  }, [])
+  }, []);
   console.log(listProduct);
 
   const handleRequestSort = (event, property) => {
@@ -151,7 +151,12 @@ export default function User() {
           <Typography variant="h4" gutterBottom>
             Product
           </Typography>
-          <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
+          <Button
+            variant="contained"
+            component={RouterLink}
+            to="/dashboard/addProduct"
+            startIcon={<Iconify icon="eva:plus-fill" />}
+          >
             New product
           </Button>
         </Stack>
@@ -171,15 +176,13 @@ export default function User() {
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
-                
+
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    
                     const id = row.id;
-                    const name = row.name; 
-                    const price = row.price; 
+                    const name = row.name;
+                    const price = row.price;
                     const discount = row.discount;
-
 
                     const isItemSelected = selected.indexOf(name) !== -1;
 
@@ -205,10 +208,10 @@ export default function User() {
                         </TableCell> */}
                         <TableCell align="left">{name}</TableCell>
                         <TableCell align="left">{price}</TableCell>
-                        <TableCell align="left">{discount}</TableCell> 
-                        <TableCell align="left">{row.stock[0].sold}</TableCell>
-                        <TableCell align="left">{row.stock[1].sold}</TableCell>
-                        <TableCell align="left">{row.stock[2].sold}</TableCell>
+                        <TableCell align="left">{discount}</TableCell>
+                        <TableCell align="left">{row.stock[0].available}</TableCell>
+                        <TableCell align="left">{row.stock[1].available}</TableCell>
+                        <TableCell align="left">{row.stock[2].available}</TableCell>
                         {/* <TableCell align="left">
                           <Label variant="ghost" color={(status === 'banned' && 'error') || 'success'}>
                             {sentenceCase(status)}
@@ -238,7 +241,7 @@ export default function User() {
                   </TableBody>
                 )}
               </Table>
-            </TableContainer> 
+            </TableContainer>
           </Scrollbar>
 
           <TablePagination
@@ -255,4 +258,3 @@ export default function User() {
     </Page>
   );
 }
-
