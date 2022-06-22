@@ -19,7 +19,23 @@ export default function RegisterForm() {
   const [pass, setPass] = useState('');
   const [repass, setRepass] = useState('');
   const [email, setEmail] = useState('');
+  const [bodyUser, setBodyUser] = useState({
+    u: '',
+    pw: '',
+    rpw: '',
+    e: '',
+    p: '',
+    role: 'admin',
+  });
 
+  const handleChangeData = (e) => {
+    const { name, value } = e.target;
+
+    setBodyUser((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
   const [showPassword, setShowPassword] = useState(false);
 
   const RegisterSchema = Yup.object().shape({
@@ -28,7 +44,7 @@ export default function RegisterForm() {
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
     username: Yup.string().required('Username is required'),
     pass: Yup.string().required('Password is required'),
-    repass: Yup.string().required('Repassword is required')
+    repass: Yup.string().required('Repassword is required'),
   });
 
   const formik = useFormik({
@@ -38,29 +54,16 @@ export default function RegisterForm() {
       username: '',
       pass: '',
       repass: '',
-      email: ''
+      email: '',
     },
     validationSchema: RegisterSchema,
-    onSubmit: () => {
-      navigate('/dashboard', { replace: true });
-    },
   });
 
   const handleClick = () => {
-    const data = {
-      a: fullName,
-      b: phone,
-      c: email,
-      d: username,
-      e: pass,
-      f: repass
-    };
+    console.log(bodyUser);
     async function insertAdmin() {
-      // Chưa kiểm tra ràng buộc username không được trùng 
+      // Chưa kiểm tra ràng buộc username không được trùng
       // || email không được trùng || phone không được trùng
-
-
-
       // const res = await axios.post('', data);
       // // console.log(res.data);
       // if (res?.data?.message === 'Auth successful' && res?.data?.role !== 'user') {
@@ -81,19 +84,23 @@ export default function RegisterForm() {
             <TextField
               fullWidth
               label="Full name"
-              onChange={(e) => { setFullName(e.target.value) }}
-              {...getFieldProps('fullName')}
-              error={Boolean(touched.fullName && errors.fullName)}
-              helperText={touched.fullName && errors.fullName}
+              name="n"
+              value={bodyUser.n}
+              onChange={handleChangeData}
+              // {...getFieldProps('fullName')}
+              // error={Boolean(touched.fullName && errors.fullName)}
+              // helperText={touched.fullName && errors.fullName}
             />
 
             <TextField
               fullWidth
               label="Phone number"
-              onChange={(e) => { setPhone(e.target.value) }}
-              {...getFieldProps('phone')}
-              error={Boolean(touched.phone && errors.phone)}
-              helperText={touched.phone && errors.phone}
+              name="p"
+              value={bodyUser.p}
+              onChange={handleChangeData}
+              // {...getFieldProps('phone')}
+              // error={Boolean(touched.phone && errors.phone)}
+              // helperText={touched.phone && errors.phone}
             />
           </Stack>
           <TextField
@@ -101,20 +108,24 @@ export default function RegisterForm() {
             autoComplete="username"
             // type=""
             label="User name"
-            onChange={(e) => { setUsername(e.target.value) }}
-            {...getFieldProps('username')}
-            error={Boolean(touched.username && errors.username)}
-            helperText={touched.username && errors.username}
+            name="u"
+            value={bodyUser.u}
+            onChange={handleChangeData}
+            // {...getFieldProps('username')}
+            // error={Boolean(touched.username && errors.username)}
+            // helperText={touched.username && errors.username}
           />
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
             <TextField
               fullWidth
               label="Password"
-              type={showPassword?'text':'password'}
-              onChange={(e) => { setPass(e.target.value) }}
-              {...getFieldProps('pass')}
-              error={Boolean(touched.pass && errors.pass)}
-              helperText={touched.pass && errors.pass}
+              name="pw"
+              value={bodyUser.pw}
+              type={showPassword ? 'text' : 'password'}
+              onChange={handleChangeData}
+              // {...getFieldProps('pass')}
+              // error={Boolean(touched.pass && errors.pass)}
+              // helperText={touched.pass && errors.pass}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -129,11 +140,13 @@ export default function RegisterForm() {
             <TextField
               fullWidth
               label="Repassword"
-              type={showPassword?'text':'password'}
-              onChange={(e) => { setRepass(e.target.value) }}
-              {...getFieldProps('repass')}
-              error={Boolean(touched.repass && errors.repass)}
-              helperText={touched.repass && errors.repass}
+              name="rpw"
+              value={bodyUser.rpw}
+              type={showPassword ? 'text' : 'password'}
+              onChange={handleChangeData}
+              // {...getFieldProps('repass')}
+              // error={Boolean(touched.repass && errors.repass)}
+              // helperText={touched.repass && errors.repass}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -151,17 +164,19 @@ export default function RegisterForm() {
             autoComplete="username"
             type="email"
             label="Email address"
-            onChange={(e) => { setEmail(e.target.value) }}
-            {...getFieldProps('email')}
-            error={Boolean(touched.email && errors.email)}
-            helperText={touched.email && errors.email}
+            onChange={handleChangeData}
+            name="e"
+            value={bodyUser.e}
+            // {...getFieldProps('email')}
+            // error={Boolean(touched.email && errors.email)}
+            // helperText={touched.email && errors.email}
           />
 
-          <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={handleClick} loading={isSubmitting}>
+          <LoadingButton fullWidth size="large" variant="contained" onClick={handleClick}>
             Register
           </LoadingButton>
         </Stack>
       </Form>
     </FormikProvider>
-  )
+  );
 }

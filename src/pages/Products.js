@@ -1,7 +1,7 @@
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
 import { useState, useEffect } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 // material
 import {
@@ -72,6 +72,7 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function User() {
+  const navigate = useNavigate();
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
@@ -93,7 +94,6 @@ export default function User() {
     }
     loadListProduct();
   }, []);
-  console.log(listProduct);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -198,28 +198,18 @@ export default function User() {
                         <TableCell padding="checkbox">
                           <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
                         </TableCell>
-                        {/* <TableCell component="th" scope="row" padding="none">
-                          <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar alt={name} src={cover} />
-                            <Typography variant="subtitle2" noWrap>
-                              {name}
-                            </Typography>
-                          </Stack>
-                        </TableCell> */}
-                        <TableCell align="left">{name}</TableCell>
+
+                        <TableCell align="left" onClick={() => navigate(`/dashboard/updateProduct?id=${id}`)}>
+                          {name}
+                        </TableCell>
                         <TableCell align="left">{price}</TableCell>
                         <TableCell align="left">{discount}</TableCell>
                         <TableCell align="left">{row.stock[0].available}</TableCell>
                         <TableCell align="left">{row.stock[1].available}</TableCell>
                         <TableCell align="left">{row.stock[2].available}</TableCell>
-                        {/* <TableCell align="left">
-                          <Label variant="ghost" color={(status === 'banned' && 'error') || 'success'}>
-                            {sentenceCase(status)}
-                          </Label>
-                        </TableCell> */}
 
                         <TableCell align="right">
-                          <UserMoreMenu />
+                          <UserMoreMenu id={id} />
                         </TableCell>
                       </TableRow>
                     );

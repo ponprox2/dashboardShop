@@ -1,7 +1,7 @@
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
 import { useState, useEffect } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 // material
 import {
@@ -36,7 +36,7 @@ const TABLE_HEAD = [
   { id: 'phone', label: 'Phone', alignRight: false },
   { id: 'address', label: 'Address', alignRight: false },
   { id: 'price', label: 'Price', alignRight: false },
-  { id: 'products', label: 'Products', alignRight: false},
+  { id: 'products', label: 'Products', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
 ];
 
@@ -85,16 +85,16 @@ export default function User() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const [listOrder, setListOrder] = useState([]);
-  const [products, setProducts ]= useState('');
-
+  const [products, setProducts] = useState('');
+  const navigate = useNavigate();
   useEffect(() => {
     async function loadListOrder() {
       const res = await axios.get('http://localhost:3000/api/v1/ordereds');
       // console.log(res.data);
-      setListOrder(res.data); 
+      setListOrder(res.data);
     }
     loadListOrder();
-  }, [])
+  }, []);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -171,16 +171,12 @@ export default function User() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const id=row.id;
-                    const name=row.recipient_name;
-                    const address=row.recipient_address;
-                    const phone=row.recipient_phone
-                    const status=row.status;
-                    const price=row.total_price
-
-                    
-
-
+                    const id = row.id;
+                    const name = row.recipient_name;
+                    const address = row.recipient_address;
+                    const phone = row.recipient_phone;
+                    const status = row.status;
+                    const price = row.total_price;
 
                     const isItemSelected = selected.indexOf(name) !== -1;
 
@@ -196,15 +192,10 @@ export default function User() {
                         <TableCell padding="checkbox">
                           <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
                         </TableCell>
-                        {/* <TableCell component="th" scope="row" padding="none">
-                          <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar alt={name} src={cover} />
-                            <Typography variant="subtitle2" noWrap>
-                              {name}
-                            </Typography>
-                          </Stack>
-                        </TableCell> */}
-                        <TableCell align="left">{name}</TableCell>
+
+                        <TableCell onClick={() => navigate(`/dashboard/orderDetail?id=${id}`)} align="left">
+                          {name}
+                        </TableCell>
                         <TableCell align="left">{phone}</TableCell>
                         <TableCell align="left">{address}</TableCell>
                         <TableCell align="left">{price}</TableCell>

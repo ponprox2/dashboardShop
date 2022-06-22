@@ -52,14 +52,14 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
     }
   }, [pathname]);
 
-  // useEffect(() => {
-  //   const temp = JSON.parse(localStorage.getItem('adminInfo'));
-  //   if (temp) {
-  //     setAdminInfo(temp);
-  //   } else {
-  //     navigate('/login');
-  //   }
-  // }, []);
+  useEffect(() => {
+    const temp = JSON.parse(localStorage.getItem('adminInfo'));
+    if (temp) {
+      setAdminInfo(temp);
+    } else {
+      navigate('/login');
+    }
+  }, []);
   const renderContent = (
     <Scrollbar
       sx={{

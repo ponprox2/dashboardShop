@@ -1,6 +1,6 @@
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import axios from 'axios';
 // material
@@ -15,7 +15,7 @@ import {
   TableBody,
   TableCell,
   Container,
-  Typography, 
+  Typography,
   TableContainer,
   TablePagination,
 } from '@mui/material';
@@ -84,15 +84,15 @@ export default function User() {
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const [listUser,  setListUser] = useState([]);
+  const [listUser, setListUser] = useState([]);
 
   useEffect(() => {
     async function loadListUser() {
       const res = await axios.get('http://localhost:3000/api/v1/users');
-      setListUser(res.data); 
+      setListUser(res.data);
     }
     loadListUser();
-  }, [])
+  }, []);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -172,9 +172,9 @@ export default function User() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, phone, account} = row;
+                    const { id, name, phone, account } = row;
                     // Đang để mặc đinh là active vì chưa có thuộc tính 'Status'
-                    const status='active'
+                    const status = 'active';
 
                     const isItemSelected = selected.indexOf(name) !== -1;
 
@@ -202,10 +202,10 @@ export default function User() {
                         <TableCell align="left">{account.role}</TableCell>
                         <TableCell align="left">{phone}</TableCell>
                         <TableCell align="left">{account.username}</TableCell>
-                        
+
                         <TableCell align="left">
-                          <Label variant="ghost" color={(status === 'banned' && 'error') || 'success'}>
-                            {sentenceCase(status)}
+                          <Label variant="ghost" color={(account.status === 'banned' && 'error') || 'success'}>
+                            {sentenceCase(account.status)}
                           </Label>
                         </TableCell>
 
